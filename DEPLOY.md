@@ -6,7 +6,7 @@ Postgres expires 30 days after creation — Neon's free tier does not expire.
 
 Files that make this work (already in the repo):
 
-- `Dockerfile` — PHP 8.3 + Apache, serves `public/`, installs Composer deps
+- `Dockerfile` — PHP 8.5 + Apache, serves `public/`, installs Composer deps
 - `docker/entrypoint.sh` — binds Apache to Render's `$PORT`, caches config, runs migrations
 - `render.yaml` — Render Blueprint (service + env vars)
 - `config/database.php` — Postgres via `DB_URL`

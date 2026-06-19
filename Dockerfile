@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM php:8.3-apache
+FROM php:8.5.7-apache
 
 # --- System dependencies & PHP extensions -----------------------------------
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -15,6 +15,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # --- Composer ----------------------------------------------------------------
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Composer runs as root inside the image; avoid plugin/root issues and memory caps.
+ENV COMPOSER_ALLOW_SUPERUSER=1 \
+    COMPOSER_MEMORY_LIMIT=-1 \
+    COMPOSER_NO_AUDIT=1 \
+    COMPOSER_NO_INTERACTION=1
 
 # --- Apache: serve from public/ and allow .htaccess rewrites -----------------
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
