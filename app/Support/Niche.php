@@ -2,7 +2,8 @@
 
 namespace App\Support;
 
-use Illuminate\Support\Arr;
+use App\Support\FieldDefinitions\FieldDefinitionRepository;
+use Illuminate\Support\Collection;
 use InvalidArgumentException;
 
 /**
@@ -60,13 +61,16 @@ class Niche
     }
 
     /**
-     * The custom-field schema applied to customers in this niche.
+     * The custom-field definitions applied to customers in this niche.
      *
-     * @return array<int, array<string, mixed>>
+     * Delegated to the bound FieldDefinitionRepository (config today, database
+     * later) so the source can change without touching any consumer.
+     *
+     * @return \Illuminate\Support\Collection<int, \App\Support\FieldDefinition>
      */
-    public function customerFields(): array
+    public function customerFields(): Collection
     {
-        return $this->definition['customer_fields'] ?? [];
+        return app(FieldDefinitionRepository::class)->forNiche($this->key);
     }
 
     /**
@@ -76,6 +80,6 @@ class Niche
      */
     public function customerFieldKeys(): array
     {
-        return Arr::pluck($this->customerFields(), 'key');
+        return $this->customerFields()->map(fn (FieldDefinition $field) => $field->key)->all();
     }
 }

@@ -8,27 +8,29 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
     @php
         $cards = [
-            ['label' => $niche->term('customers'), 'value' => $stats['customers']],
-            ['label' => 'Upcoming appointments', 'value' => $stats['appointments_upcoming']],
-            ['label' => 'Unpaid invoices', 'value' => $stats['invoices_unpaid']],
-            ['label' => 'Due to reschedule', 'value' => $stats['due_to_reschedule']],
+            ['label' => $niche->term('customers'), 'value' => $stats['customers'], 'href' => route('customers.index')],
+            ['label' => 'Upcoming appointments', 'value' => $stats['appointments_upcoming'], 'href' => null],
+            ['label' => 'Unpaid invoices', 'value' => $stats['invoices_unpaid'], 'href' => null],
+            ['label' => 'Due to reschedule', 'value' => $stats['due_to_reschedule'], 'href' => null],
         ];
     @endphp
 
     @foreach ($cards as $card)
-        <div class="bg-white rounded-xl shadow p-5">
+        @php $tag = $card['href'] ? 'a' : 'div'; @endphp
+        <{{ $tag }} @if($card['href']) href="{{ $card['href'] }}" @endif
+            class="block bg-white rounded-xl shadow p-5 {{ $card['href'] ? 'hover:shadow-md transition' : '' }}">
             <div class="text-sm text-gray-500">{{ $card['label'] }}</div>
             <div class="text-3xl font-semibold mt-1 text-brand">{{ $card['value'] }}</div>
-        </div>
+        </{{ $tag }}>
     @endforeach
 </div>
 
 <div class="mt-8 bg-white rounded-xl shadow p-6">
-    <h2 class="font-semibold mb-2">Phase 0 complete ✅</h2>
+    <h2 class="font-semibold mb-2">Phase 1 — {{ $niche->term('customers') }}</h2>
     <p class="text-sm text-gray-600">
-        Foundation is in place: auth, niche-aware layout (currently
-        <strong>{{ $niche->label() }}</strong>), and the config scaffold.
-        Next up — Phase 1: {{ $niche->term('customers') }} with niche custom fields.
+        Manage your {{ strtolower($niche->term('customers')) }} with
+        {{ $niche->label() }}-specific fields.
+        <a href="{{ route('customers.index') }}" class="text-brand hover:underline">Go to {{ $niche->term('customers') }} →</a>
     </p>
 </div>
 @endsection

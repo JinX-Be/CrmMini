@@ -47,11 +47,14 @@ return [
                 'customers' => 'Customers',
                 'service' => 'Service',
             ],
+            // Field options: key (stable, never rename), label, type
+            // (text|number|select|checkbox|textarea), options (for select),
+            // required (bool), help_text, sort_order.
             'customer_fields' => [
-                ['key' => 'num_windows', 'label' => 'Number of windows', 'type' => 'number'],
-                ['key' => 'floors', 'label' => 'Floors', 'type' => 'number'],
-                ['key' => 'access_notes', 'label' => 'Access notes', 'type' => 'textarea'],
-                ['key' => 'frequency_weeks', 'label' => 'Preferred frequency (weeks)', 'type' => 'number'],
+                ['key' => 'num_windows', 'label' => 'Number of windows', 'type' => 'number', 'required' => true, 'sort_order' => 1],
+                ['key' => 'floors', 'label' => 'Floors', 'type' => 'number', 'sort_order' => 2],
+                ['key' => 'frequency_weeks', 'label' => 'Preferred frequency (weeks)', 'type' => 'number', 'help_text' => 'How often the customer wants a clean.', 'sort_order' => 3],
+                ['key' => 'access_notes', 'label' => 'Access notes', 'type' => 'textarea', 'help_text' => 'Gate codes, pets, parking, etc.', 'sort_order' => 4],
             ],
         ],
 
