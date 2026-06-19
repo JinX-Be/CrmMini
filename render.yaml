@@ -1,0 +1,47 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Deploys the Mini CRM as a free Docker web service.
+# The database lives on Neon (free Postgres) — see DEPLOY.md.
+
+services:
+  - type: web
+    name: mini-crm
+    runtime: docker
+    plan: free
+    region: frankfurt        # pick the region closest to you / to Neon
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /up
+    autoDeploy: true
+    envVars:
+      # --- Secrets: set these in the Render dashboard (sync: false) ---
+      - key: APP_KEY          # run `php artisan key:generate --show` locally, paste the base64:... value
+        sync: false
+      - key: APP_URL          # your Render URL, e.g. https://mini-crm.onrender.com
+        sync: false
+      - key: DB_URL           # full Neon connection string (postgresql://...?sslmode=require)
+        sync: false
+
+      # --- Non-secret config ---
+      - key: APP_NAME
+        value: "Mini CRM"
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: NICHE
+        value: window_cleaning
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: info
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: sync
+      # NOTE: Render free tier blocks outbound SMTP (ports 25/465/587).
+      # Use an HTTP-API mail provider (Resend/Postmark/Mailgun API) in Phase 3+.
+      - key: MAIL_MAILER
+        value: log
