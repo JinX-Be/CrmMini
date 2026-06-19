@@ -52,6 +52,8 @@ class CustomerController extends Controller
     {
         $this->authorizeNiche($customer);
 
+        $customer->load(['appointments' => fn ($q) => $q->orderByDesc('starts_at')->with('service')]);
+
         return view('customers.show', compact('customer'));
     }
 

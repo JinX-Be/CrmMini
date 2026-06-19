@@ -55,6 +55,23 @@
         @endif
     </div>
 
+    <div class="bg-white rounded-xl shadow p-6 mt-6">
+        <div class="flex items-center justify-between mb-3">
+            <h2 class="font-semibold">Appointments</h2>
+            <a href="{{ route('appointments.create', ['customer' => $customer->id]) }}" class="text-sm text-brand hover:underline">+ New appointment</a>
+        </div>
+        @forelse ($customer->appointments as $appt)
+            <a href="{{ route('appointments.show', $appt) }}" class="flex items-center justify-between py-2 border-b border-gray-100 last:border-0 hover:bg-gray-50 -mx-2 px-2 rounded">
+                <span class="text-sm">{{ $appt->starts_at->format('D j M Y, H:i') }}
+                    @if ($appt->service)<span class="text-gray-500">· {{ $appt->service->name }}</span>@endif
+                </span>
+                <span class="text-xs font-medium px-2 py-0.5 rounded-full text-white" style="background: {{ $appt->statusColor() }}">{{ ucfirst($appt->status) }}</span>
+            </a>
+        @empty
+            <p class="text-sm text-gray-500">No appointments yet.</p>
+        @endforelse
+    </div>
+
     <form method="POST" action="{{ route('customers.destroy', $customer) }}" class="mt-4"
           onsubmit="return confirm('Delete this {{ strtolower($niche->term('customer')) }}? This cannot be undone.');">
         @csrf

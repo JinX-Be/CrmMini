@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Appointment;
 use App\Models\Customer;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -57,6 +59,35 @@ class DatabaseSeeder extends Seeder
             Customer::updateOrCreate(
                 ['email' => $row['email']],
                 $row + ['niche' => 'window_cleaning'],
+            );
+        }
+
+        // Demo service + a scheduled appointment.
+        $service = Service::updateOrCreate(
+            ['niche' => 'window_cleaning', 'name' => 'Standard window clean'],
+            [
+                'default_price' => 45.00,
+                'default_duration_minutes' => 60,
+                'default_interval_weeks' => 8,
+                'active' => true,
+            ],
+        );
+
+        $marie = Customer::where('email', 'marie.dubois@example.com')->first();
+
+        if ($marie) {
+            Appointment::firstOrCreate(
+                [
+                    'niche' => 'window_cleaning',
+                    'customer_id' => $marie->id,
+                    'starts_at' => now()->addDays(3)->setTime(9, 0),
+                ],
+                [
+                    'service_id' => $service->id,
+                    'duration_minutes' => 60,
+                    'status' => 'scheduled',
+                    'price' => 45.00,
+                ],
             );
         }
     }

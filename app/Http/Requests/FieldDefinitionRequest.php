@@ -30,13 +30,20 @@ class FieldDefinitionRequest extends FormRequest
                 ->all();
         }
 
+        if ($this->isCreating()) {
+            // Fall back to the label when the key field is left blank.
+            // (An empty form input is "" rather than null, so use ?: not a default.)
+            $rawKey = trim((string) $this->input('key')) ?: (string) $this->input('label');
+            $key = Str::slug($rawKey, '_');
+        } else {
+            // Key is immutable once set.
+            $key = $this->route('field')->key;
+        }
+
         $this->merge([
             'required' => $this->boolean('required'),
             'options' => $options ?: [],
-            // Key is only settable on create, and always a stable slug.
-            'key' => $this->isCreating()
-                ? Str::slug((string) $this->input('key', $this->input('label')), '_')
-                : $this->route('field')->key,
+            'key' => $key,
         ]);
     }
 

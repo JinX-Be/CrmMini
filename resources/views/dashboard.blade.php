@@ -9,7 +9,7 @@
     @php
         $cards = [
             ['label' => $niche->term('customers'), 'value' => $stats['customers'], 'href' => route('customers.index')],
-            ['label' => 'Upcoming appointments', 'value' => $stats['appointments_upcoming'], 'href' => null],
+            ['label' => 'Upcoming appointments', 'value' => $stats['appointments_upcoming'], 'href' => route('appointments.index')],
             ['label' => 'Unpaid invoices', 'value' => $stats['invoices_unpaid'], 'href' => null],
             ['label' => 'Due to reschedule', 'value' => $stats['due_to_reschedule'], 'href' => null],
         ];

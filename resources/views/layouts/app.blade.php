@@ -19,6 +19,8 @@
             <nav class="flex items-center gap-4 text-sm">
                 <a href="{{ route('dashboard') }}" class="hover:underline">Dashboard</a>
                 <a href="{{ route('customers.index') }}" class="hover:underline">{{ $niche->term('customers') }}</a>
+                <a href="{{ route('appointments.index') }}" class="hover:underline">Calendar</a>
+                <a href="{{ route('services.index') }}" class="hover:underline">Services</a>
                 @can('manage-fields')
                     <a href="{{ route('fields.index') }}" class="hover:underline">Fields</a>
                 @endcan
